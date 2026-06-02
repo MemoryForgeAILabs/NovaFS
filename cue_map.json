@@ -1,0 +1,10 @@
+{
+  "alpha": { "symbol": "🔺", "weight": 1.0 },
+  "beta": { "symbol": "🔵", "weight": 1.0 },
+  "gamma": { "symbol": "🟢", "weight": 1.0 },
+  "delta": { "symbol": "🔶", "weight": 1.0 },
+  "priority": { "symbol": "🔺", "weight": 0.8 },
+  "support": { "symbol": "🔵", "weight": 0.8 },
+  "growth": { "symbol": "🟢", "weight": 0.8 },
+  "innovation": { "symbol": "🔶", "weight": 0.8 }
+}

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# NovaFS generated runtime artifacts (recreated by the app)
+route_log.json
+glyph_trace.json
+view_trace.txt
+view_trace_output.txt
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
