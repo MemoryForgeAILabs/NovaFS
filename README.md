@@ -4,6 +4,8 @@ NovaFS is a proof-of-concept symbolic routing engine. It demonstrates how simple
 
 This lean prototype is designed to be easy to understand and extend.
 
+> **⚠️ Status: Archived (2026).** NovaFS is no longer actively developed and is published here as a public reference. The problem it explored — turning natural-language *intent* into the correct database query or data route **deterministically, without embeddings or vector search** — is now handled more flexibly by modern natural-language-to-SQL (NL→DB) query models. This repo preserves the symbolic-routing kernel and its glass-box design. See [Background & Context](#-background--context) and [Why this is archived](#-why-this-is-archived).
+
 ---
 
 ## 🚀 Overview
@@ -16,6 +18,62 @@ NovaFS lets you:
 ✅ Log every routing event for transparent traceability
 
 This project can serve as a foundation for more advanced systems in AI memory, search, and knowledge management.
+
+---
+
+## 📖 Background & Context
+
+The code in this repository is the **kernel** of a larger idea. The core
+premise of NovaFS was *deterministic semantic routing*:
+
+> Map a natural-language query to the **correct** data — the right file,
+> table, or knowledge category — using fixed, inspectable rules instead of
+> embeddings or vector similarity search.
+
+The toy demo here routes symbolic cues (`alpha`, `🔺`) to files. In its more
+developed form the same mechanism grew into a **semantic abstraction layer**
+that could answer one plain-language question (e.g. *"check brake history"*)
+across several wildly different database schemas — from free-text notes to
+fully normalized tables — without the caller needing to know where the data
+lived.
+
+The design favored a few principles consistently:
+
+- **Deterministic** — the same input always resolves to the same route, so
+  behavior is reproducible.
+- **Glass-box / auditable** — every routing decision is logged with the cue,
+  the chosen path, and a timestamp. No black box.
+- **No model in the hot path** — routing is keyword/concept matching plus a
+  lightweight reinforcement-and-decay weighting of paths that succeed or fail
+  over time. Fast and cheap.
+- **Concept-first** — queries route to stable *concepts*, decoupling user
+  intent from the volatile structure of whatever store sits underneath.
+
+The trade-off was deliberate and, ultimately, decisive: it **traded
+flexibility for predictability**. A rule-based router cannot handle ambiguous
+or novel phrasing the way a learned model can.
+
+---
+
+## 🪦 Why this is archived
+
+The specific job NovaFS did well — translating natural language into the
+right query/route over structured data — is now done directly, and more
+flexibly, by **natural-language-to-database (NL→DB / NL→SQL) query models**.
+Those models close exactly the gap NovaFS's deterministic approach left open:
+handling ambiguous, unseen, and conversational phrasing without hand-built
+concept maps and routing tables to maintain.
+
+Given that, the project is no longer worth actively developing. It is kept
+public as a compact, readable reference for:
+
+- the **symbolic-routing kernel** (see `routing_engine.py`),
+- the **glass-box, deterministic** design stance, and
+- the path **reinforcement/decay** weighting idea.
+
+If you're solving the NL→data problem today, reach for an NL→SQL model first.
+NovaFS is here to illustrate an alternative point in the design space — one
+that prizes determinism and auditability — not as something to build on.
 
 ---
 
