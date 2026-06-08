@@ -10,6 +10,18 @@ def load_maps():
         symbol_map = json.load(f)
     return cue_map, symbol_map
 
+# Pick the destination filename for a symbol_map entry.
+# Entries look like {"paths": {"🔺_alpha.txt": 1, ...}}; we choose the
+# highest-weighted path. A bare string is also accepted for flexibility.
+def resolve_target_file(entry):
+    if isinstance(entry, str):
+        return entry
+    if isinstance(entry, dict):
+        paths = entry.get("paths", {})
+        if paths:
+            return max(paths, key=paths.get)
+    return None
+
 # Resolve a symbolic cue to a file and route
 def resolve_symbolic_cue(cue):
     cue_map, symbol_map = load_maps()
@@ -19,18 +31,22 @@ def resolve_symbolic_cue(cue):
         if isinstance(target, dict):
             target = target.get("symbol", None)
         if target and target in symbol_map:
-            return {
-                "cue": cue,
-                "file": symbol_map[target],
-                "path": f"{cue} → {symbol_map[target]}"
-            }
+            file = resolve_target_file(symbol_map[target])
+            if file:
+                return {
+                    "cue": cue,
+                    "file": file,
+                    "path": f"{cue} → {file}"
+                }
 
     if cue in symbol_map:
-        return {
-            "cue": cue,
-            "file": symbol_map[cue],
-            "path": f"{cue} → {symbol_map[cue]}"
-        }
+        file = resolve_target_file(symbol_map[cue])
+        if file:
+            return {
+                "cue": cue,
+                "file": file,
+                "path": f"{cue} → {file}"
+            }
 
     return None
 
